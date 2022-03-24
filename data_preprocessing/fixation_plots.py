@@ -33,7 +33,7 @@ def distanceToTargetPlot(eyetracker_type, subject_nr, df_trial, df_fixations):
         plt.title('Graph 1) Distance to Target Scatter Plot: Patricipant ' + str(subject_nr) + ' with the fixation centroid grupped around the 56 target in the Large Gird Paradigm',fontsize=20)
         plt.xlabel('x coordinates in pixel units',fontsize=12)
         plt.ylabel('y coordinates in pixel units',fontsize=12)
-        plt.savefig('./'+str(tracker_name) + '_Fixations_Graphs/'+ str(subject_nr) + ''+str(tracker_name) + '_onsetfix_DistanceLine.jpg')
+        plt.savefig('./plots_images/'+str(tracker_name) + '_Fixations_Graphs/'+ str(subject_nr) + ''+str(tracker_name) + '_onsetfix_DistanceLine.jpg')
         plt.grid(True)
         plt.show()
 def dispersionGridScatter(eyetracker_type, subject_nr, df_trial,  df_fixations, ):
@@ -51,7 +51,7 @@ def dispersionGridScatter(eyetracker_type, subject_nr, df_trial,  df_fixations, 
         plt.xlabel('x coordinates in pixel units')
         plt.ylabel('y coordinates in pixel units')
         plt.grid(True)
-        plt.savefig('./'+str(tracker_name) + '_Fixations_Graphs/' + str(subject_nr) + ''+str(tracker_name) + '_onsetfix_DistanceLine.jpg')
+        plt.savefig('./plots_images/'+str(tracker_name) + '_Fixations_Graphs/' + str(subject_nr) + ''+str(tracker_name) + '_onsetfix_DistanceLine.jpg')
         plt.show()
 def precisionScatterScatter(eyetracker_type, subject_nr, df_trial,  df_fixations, ):
     if (eyetracker_type=="lb" or eyetracker_type=="labvanced" or eyetracker_type=="Labvanced"):
@@ -67,5 +67,5 @@ def precisionScatterScatter(eyetracker_type, subject_nr, df_trial,  df_fixations
     plt.xlabel('x coordinates in pixel units')
     plt.ylabel('y coordinates in pixel units')
     plt.grid(True)
-    plt.savefig('./'+str(tracker_name) + '_Fixations_Graphs/'+ str(subject_nr) + ''+str(tracker_name) + '_onsetfix_DistanceTarget.jpg')
+    plt.savefig('./plots_images/'+str(tracker_name) + '_Fixations_Graphs/'+ str(subject_nr) + ''+str(tracker_name) + '_onsetfix_DistanceTarget.jpg')
     plt.show()

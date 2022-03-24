@@ -5,6 +5,11 @@
 
 
 # Import many dataFrame for the Algorithm Comparison:
+
+
+
+# In[3]:
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,16 +17,11 @@ from matplotlib.pyplot import cm
 from matplotlib.lines import Line2D
 from random import randint
 from scipy import stats
-import glob
-import os
 pd.set_option('display.max_rows', None)
 pd.set_option('display.max_columns', None)
-
-
-# In[3]:
-
-
 counter = 13
+
+
 # for files in sorted(glob.glob("../../data/lb_data/trial_data/*.csv"),key=os.path.getmtime):
 #     counter = counter + 1
 #     print(counter)
@@ -61,7 +61,7 @@ for i in range(3,counter):
     plt.xlabel("Participants Number")
     plt.ylabel("Calibration Error and Trial Error in pixels")
     plt.title("Labvanced Data: Calibration Error over all participant where mean value is " + str(cal_mean)+ " pixels, marked as a red bars. \n The blue bars represents the Average Trial Error over all participants, all in pixels")
-    plt.savefig('../calibrations_graphs/labvanced_calVsTrial_error.jpg')
+    plt.savefig('./plots_images/calibrations_graphs/labvanced_calVsTrial_error.jpg')
     plt.show()
     data_time = all_lb[['reactionTimeCalc','Rec_Session_Id']]
     fig = plt.figure(figsize =(10, 7))
@@ -78,7 +78,7 @@ for i in range(3,counter):
     plt.xlabel("time in miliseconds")
     plt.title('Histogram which shows reaction time of pressing space button after target was not visible for participant \n WITH outliers over all participants')
     # show plot
-    plt.savefig('../calibrations_graphs/labvanced_reaction_time_outliers.jpg')
+    plt.savefig('./plots_images/calibrations_graphs/labvanced_reaction_time_outliers.jpg')
     plt.show()
     
     data_time_restricted = pd.DataFrame()
@@ -93,7 +93,7 @@ for i in range(3,counter):
     plt.xlabel("time in miliseconds")
     plt.title('Histogram which shows reaction time of pressing space button after target was not visible for participant \n with FILTER LESS THEN 300ms over all participants')
     # show plot
-    plt.savefig('calibrations_graphs/labvanced_data_after_300ms_reactionTime_treshold.jpg')
+    plt.savefig('./plots_images/calibrations_graphs/labvanced_data_after_500ms_reactionTime_treshold.jpg')
     plt.show()
     
     all_lb.to_csv('../data/lb_data/lb_trial_pp/p' + str(i) +'_trial_pp.csv')
