@@ -1,0 +1,8 @@
+#ignore data files
+*.asc
+*.csv
+*.jpg
+*.jpeg
+*data
+*ascData
+*PyGazeAnalyser-master
