@@ -69,3 +69,24 @@ def precisionScatterScatter(eyetracker_type, subject_nr, df_trial,  df_fixations
     plt.grid(True)
     plt.savefig('./plots_images/'+str(tracker_name) + '_Fixations_Graphs/'+ str(subject_nr) + ''+str(tracker_name) + '_onsetfix_DistanceTarget.jpg')
     plt.show()
+
+def timeSeriesSyncPlot (time_lb, coor_lb, coor_el):
+    x1 = time_lb
+    y1 = coor_lb
+
+    x2 = time_lb
+    y2 = coor_el
+
+    # plot
+    plt.legend()
+    plt.xlabel('Time in the miliseconds', fontsize=34)
+    plt.ylabel('Coordinates in pixels', fontsize=34)
+    plt.plot(x1,y1, c='b', label='Labvanced', linewidth=4, alpha=0.75)
+    plt.plot(x2,y2, c='r', label='EyeLink', linewidth=4, alpha=0.75)
+    plt.gcf().set_size_inches((20, 11))
+    plt.gca().invert_yaxis()
+    plt.ticklabel_format(useOffset=False)
+    plt.ticklabel_format(useOffset=False, style='plain')
+    plt.grid()
+    plt.show()
+    print('Blue Line represent timeseries data from Labvanced, the red line represents Eyelink')

@@ -1,5 +1,6 @@
 class GazeFixationsExport():
     def __init__ (self):
+        diffArr = []
         #Import Libraries
         import os
         import time
@@ -100,6 +101,9 @@ class GazeFixationsExport():
             
             
             
+
+
+
             # Setup the first point START    
             tracker_start = eyelink_time_start
             # Setup the last point END    
@@ -116,15 +120,24 @@ class GazeFixationsExport():
             
             # Create modfied START trigger timestamp by substracting the delay value:
             tracker_start_modif = (tracker_start - start_end_diff)
+            diffArr.append(start_end_diff)
 
+      
             # Perform Linear interpolation with a new value for starting trigger
             # Code without correction
             ############
-        #     a = (display_time_ml_end - display_time_ml_start)/(tracker_end-tracker_start)
+            a = (display_time_ml_end - display_time_ml_start)/(tracker_end-tracker_start)
+            b = - tracker_start * a + display_time_ml_start
             ############
             # Code with correction
-            a = (display_time_ml_end - display_time_ml_start)/(tracker_end-tracker_start_modif)
-            b = - tracker_start_modif * a + display_time_ml_start
+            # a = (display_time_ml_end - display_time_ml_start)/(tracker_end-tracker_start_modif)
+            # b = - tracker_start_modif * a + display_time_ml_start
+
+
+            
+
+
+            # linear interpolation
             df_all['Time'] = df_all['Tracker_Time'] * a + b
 
             # Drop not used columns
@@ -163,3 +176,5 @@ class GazeFixationsExport():
             df.Start = df.Start.apply(lambda x: '%.0f' % x)
             df.End = df.End.apply(lambda x: '%.0f' % x)
             df.to_csv('./data/el_data/el_events/p' + str(counter) + '_events.csv', index = False)
+            break
+        print(diffArr)
