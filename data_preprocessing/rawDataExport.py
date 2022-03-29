@@ -27,7 +27,7 @@ class GazeFixationsExport():
 
             print('loading subject file - ' + str(files))
 
-        counter = 2
+        counter = 0
         modification_calc=True
         for files in sorted(glob.glob("./ascData/*.asc"),key=os.path.getmtime):
             counter = counter +1
@@ -35,7 +35,7 @@ class GazeFixationsExport():
             data = files
             
         #     break
-            data_raw = read_edf(data, 'START', missing=0.0, debug=True)
+            data_raw = read_edf(data, 'START', missing=0.0, debug=False)
             type(data_raw), len(data_raw), type(data_raw[0]), data_raw[0].keys()
 
         #     Open Asci data and create a list 'lines' with each row line from the ASC data
@@ -204,6 +204,10 @@ class GazeFixationsExport():
                     row['End'] = end
 
                     df = df.append(row, ignore_index=True)
+
+            # Convert Start and End time using end trigger to unix timestamp
+            df['Start'] = abs((df.Start - diff_between_end))
+            df['End'] = abs((df.End - diff_between_end) )
             # Interpolate the fixations from starting and ending trigger
             df['Start'] = df['Start'] * a + b
             df['End'] = df['End'] * a + b
@@ -211,7 +215,7 @@ class GazeFixationsExport():
             df.End = df.End.apply(lambda x: '%.0f' % x)
             df.to_csv('./data/el_data/el_events/p' + str(counter) + '_events.csv', index = False)
             print('fixation data saved, for participant =' + str(counter))
-        #     break
+            # break
 
 
 

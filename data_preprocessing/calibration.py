@@ -13,9 +13,9 @@ class Calibration():
         # Don't pop up the window with graphs tha
         plt.rcParams['interactive'] == False
 
-        counter = 13
+        counter = 14
 
-        for i in range(3,counter):
+        for i in range(1,counter):
             all_lb = pd.read_csv('./data/lb_data/trial_data/p' + str(i) + '_trials.csv')
 
             all_lb = all_lb[all_lb['Task_Name'] == 'large_grid']
