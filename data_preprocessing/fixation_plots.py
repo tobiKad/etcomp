@@ -90,3 +90,32 @@ def timeSeriesSyncPlot (time_lb, coor_lb, coor_el):
     plt.grid()
     plt.show()
     print('Blue Line represent timeseries data from Labvanced, the red line represents Eyelink')
+
+def distanceToTargetPlot(lb_fixations, el_fixations, trial_data):
+        lb_grouped = lb_fix.groupby(['targetX', 'targetY'])
+        trials_grouped = all_trials.groupby(['targetX', 'targetY'])
+
+        grouped_fixations_by_trials = lb_grouped
+        grouped_trials = trials_grouped
+        # plt.plot(x_values, y_values, color='blue')
+
+        point2 = [grouped_fixations_by_trials.x.median(), grouped_fixations_by_trials.y.median()]
+        point1 = [grouped_trials.targetX.first(), grouped_trials.targetY.first()]
+
+        x_values = [point1[0], point2[0]]
+        y_values = [point1[1], point2[1]]
+
+        fig, ax = plt.subplots(1, figsize=(16,10))
+        plt.plot(x_values, y_values, color='blue')
+        plt.gca().invert_yaxis()
+        plt.scatter(all_trials.targetX, all_trials.targetY, marker='+', c='Black', s=300)
+        plt.scatter(grouped_fixations_by_trials.x.median(), grouped_fixations_by_trials.y.median(), marker='o', c =grouped_fixations_by_trials.distance.median(), s=grouped_fixations_by_trials.distance.mean()*4, cmap="RdYlGn_r", edgecolor='black', linewidth=1, alpha=0.75,)
+        cbar = plt.colorbar()
+        cbar.set_label('Median value of distance to target in pixels', fontsize=22)
+        plt.title('Graph '+str(graph_counter)+') Labvanced Data: Location of the X and Y coordinated grouped around targets with the Grand Median Euclidian Distance: \nFor all participants with the fixation centroid as circle grupped around the 56 targets in the Large Gird Paradigm',fontsize=12)
+        plt.xlabel('x coordinates in pixel units',fontsize=22)
+        plt.ylabel('y coordinates in pixel units',fontsize=22)
+
+        plt.grid(True)
+        plt.savefig('./analysis_graphs/centroid_target_median_LB.jpg')
+        plt.show()

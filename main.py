@@ -1,9 +1,9 @@
-from data_preprocessing import data_conversion
+from data_preprocessing import rawDataExport
 from data_preprocessing import utility, calibration
 
 # Convert all Raw Data:
 print('Starting converting raw data')
-data_conversion.GazeFixationsExport()
+rawDataExport.GazeFixationsExport()
 
 print('Computing the calibration from Eyetrackers')
 calibration.Calibration()

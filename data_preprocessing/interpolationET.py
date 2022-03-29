@@ -30,7 +30,7 @@ def formating_labvanced (df_lb):
     # # Drop NaNs
     df_lb.dropna(inplace=True)
 
-    # df_lb = df_lb.set_index('time_lb')
+    # df_lb = df_lb.set_index('time_lb', drop=True)
     return df_lb
 
 def formating_eyelink (df_el):
