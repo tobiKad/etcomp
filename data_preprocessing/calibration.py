@@ -13,7 +13,7 @@ class Calibration():
         # Don't pop up the window with graphs tha
         plt.rcParams['interactive'] == False
 
-        counter = 14
+        counter = 17
 
         for i in range(1,counter):
             all_lb = pd.read_csv('./data/lb_data/trial_data/p' + str(i) + '_trials.csv')

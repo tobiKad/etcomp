@@ -7,7 +7,7 @@ class lastFixLB():
         from data_preprocessing import fixation_plots as plots
         from data_preprocessing.utility import utilitiesCalc
 
-        counter = 14
+        counter = 17
         tracker_type = "lb"
 
         for i in range(1,counter):
