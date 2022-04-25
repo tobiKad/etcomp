@@ -13,7 +13,7 @@ sns.set_context('talk',font_scale=.8)
 
 def formating_labvanced (df_lb):
     # Renaming the columns
-    df_lb = df_lb[df_lb['Task_Name'] == "large_grid"]
+    # df_lb = df_lb[df_lb['Task_Name'] == "large_grid"]
     df_lb = df_lb.rename(columns={"value":"X_lb","Unnamed: 11":"Y_lb","Unnamed: 12":"time_lb","Unnamed: 13":'c'})
     df_lb['time_lb'] = df_lb['time_lb'].fillna(0)
     df_lb = df_lb[(df_lb[['time_lb']] != 0).all(axis=1)]

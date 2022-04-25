@@ -3,8 +3,8 @@ from data_preprocessing import utility, calibration
 # from data_processing import fixationAnalysisLG
 
 # # Convert all Raw Data:
-# print('Starting converting raw data interpolation and sync')
-# rawDataExport.GazeFixationsExport()
+print('Starting converting raw data interpolation and sync')
+rawDataExport.GazeFixationsExport()
 
 print('Computing the calibration from Eyetrackers')
 calibration.Calibration()

@@ -56,7 +56,7 @@ def addParticipantNumberCol(participant_number, df):
     return df
 def formating_timeseries(df_gaze):
     df_gaze = df_gaze.rename({'value': 'x', 'Unnamed: 11': 'y','Unnamed: 12': 'dur','Unnamed: 13': 'ts','Unnamed: 14': 'tf','Unnamed: 15': 'disp'}, axis='columns')
-    df_gaze = df_gaze[df_gaze['Task_Name'] == 'large_grid']
+    # df_gaze = df_gaze[df_gaze['Task_Name'] == 'large_grid']
     df_gaze = df_gaze.sort_values(by ='timestamp' )
     df_gaze["ts"] = pd.to_numeric(df_gaze["ts"],downcast='integer')
     df_gaze["tf"] = pd.to_numeric(df_gaze["tf"],downcast='integer')
@@ -69,7 +69,7 @@ def formating_timeseries(df_gaze):
 
     return df_gaze
 def formating_trials(df_trial):
-    df_trial = df_trial[df_trial['Task_Name'] == 'large_grid']
+    # df_trial = df_trial[df_trial['Task_Name'] == 'large_grid']
     df_trial.button_pressed = df_trial.button_pressed.apply(lambda x: int('%.0f' % x))
     df_trial["targetX"] = pd.to_numeric(df_trial["targetX"],downcast='integer')
     df_trial["targetY"] = pd.to_numeric(df_trial["targetY"],downcast='integer') 
