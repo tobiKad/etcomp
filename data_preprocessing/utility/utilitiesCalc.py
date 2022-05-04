@@ -5,7 +5,7 @@ import pandas as pd
 
 
 def calcEuclideanDistance(df_fixations, df_trial):
-    df_trial.drop(columns=['Unnamed: 0'])
+    # df_trial.drop(columns=['Unnamed: 0'])
     df_trial = df_trial.reset_index()
     x1 = df_fixations.x
     # x1
@@ -81,3 +81,24 @@ def formating_trials(df_trial):
 def formating_el_data(df):
     df= df.rename({'Start':'ts', 'End':'tf'}, axis='columns')
     return df
+
+def fixtaskParsering(df,df_el, task_name):
+    df = df[df['Task_Name'] == task_name]
+    
+    ## take the first and last timestamp from Eyelink data to create another chunk
+    start_df = df.timestamp.head(1).values
+    end_df = df.timestamp.tail(1).values
+    
+    df_el = df_el[(df_el['Start'] >= start_df[0]) & (df_el['End'] <= end_df[0])]
+
+    return df_el
+def gazetaskParsering(df,df_el, task_name):
+    df = df[df['Task_Name'] == task_name]
+    
+    ## take the first and last timestamp from Eyelink data to create another chunk
+    start_df = df.timestamp.head(1).values
+    end_df = df.timestamp.tail(1).values
+    
+    df_el = df_el[(df_el['Time'] >= start_df[0]) & (df_el['Time'] <= end_df[0])]
+
+    return df_el

@@ -18,7 +18,7 @@ class Calibration():
         for i in range(1,counter):
             all_lb = pd.read_csv('./data/lb_data/trial_data/p' + str(i) + '_trials.csv')
 
-            # all_lb = all_lb[all_lb['Task_Name'] == 'large_grid']
+            all_lb = all_lb[all_lb['Task_Name'] == 'large_grid']
             all_lb = all_lb.reset_index()
             
             all_lb.calibration_error.unique()
