@@ -3,6 +3,7 @@
 *.csv
 *.jpg
 *.jpeg
+*.ipynb
 *data
 *ascData
 *PyGazeAnalyser-master
