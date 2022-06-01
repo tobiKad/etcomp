@@ -28,13 +28,19 @@ def resampleData(df):
     df = df.set_index('time_lb')
     # 500hz is 2ms
     df = df.resample('2ms').interpolate()
-    #drop missing values
-    df.dropna(subset=['X_lb'], how='all', inplace=True)
-    # Reconvert from datatime to unix timestamp
     df.index = df.index.astype('int64') // 10** 6
-    # After resampling convert coordinate data to int
-    df.X_lb = df.X_lb.astype('int64')
-    df.Y_lb = df.Y_lb.astype('int64')
+
+    
+    return df
+def resampleDataEyelink(df):
+    # 1.Resample data to 500Hz to have equal sample size
+    # First to use resmaple function I have to change the unix timestamp (int) to datatime format
+    df['time_el'] = pd.to_datetime(df["time_el"], unit='ms')
+    # Then change index to converted column and use the function using mean value to resample from 30hz up to 500hz
+    df = df.set_index('time_el')
+    # 500hz is 2ms
+    df = df.resample('2ms').interpolate()
+    df.index = df.index.astype('int64') // 10** 6
     
     return df
 # Take inteporlated data because we need data with equal index size and same sampling rate

@@ -7,7 +7,7 @@ class lastFixLB():
         from data_preprocessing import fixation_plots as plots
         from data_preprocessing.utility import utilitiesCalc
 
-        counter = 17
+        counter = 20
         tracker_type = "lb"
         task_names = ['large_grid','smooth_pursuit','free_view']
         for i in range(1,counter):
@@ -45,7 +45,7 @@ class lastFixLB():
 
 
             for j in task_names:
-                df_task_parsed = utilitiesCalc.taskParsering(df_lb,df_el, j)
+                df_task_parsed = utilitiesCalc.fixtaskParsering(df_lb,df_el, j)
                 df_task_parsed.to_csv('./data/el_data/'+ str(j) +'/p' + str(i) + '_fixations.csv', index = False)
 
             # Calculate the offset-fixations
