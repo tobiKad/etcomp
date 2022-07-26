@@ -7,12 +7,12 @@ class lastFixLB():
         from data_preprocessing import fixation_plots as plots
         from data_preprocessing.utility import utilitiesCalc
 
-        counter = 20
+        counter = 22
         tracker_type = "lb"
         task_names = ['large_grid','smooth_pursuit','free_view']
         for i in range(1,counter):
             df_lb = pd.read_csv('./data/lb_data/fixations_data/p' + str(i) + '_fixations.csv')
-            df_lb_trial = pd.read_csv('./data/lb_data/lb_trial_pp/p' + str(i) + '_trial_pp.csv')
+            df_lb_trial = pd.read_csv('./data/lb_data/trial_data/p' + str(i) + '_trials.csv')
             # df_lb_trial = pd.read_csv('../data/lb_data/trial_data/p' + str(i) + '_trials.csv')
             
             # format whole data
@@ -21,19 +21,19 @@ class lastFixLB():
             df_lb_trial = utilitiesCalc.formating_trials(df_lb_trial)
             # Calculate the offset-fixations
             df_offsetFix = utilitiesCalc.calcOffsetFixation(tracker_type,df_lb_trial, df_lb)
-            # Caluclate The Euclidan Distance
+        #     # Caluclate The Euclidan Distance
             df_offsetFix = utilitiesCalc.calcEuclideanDistance(df_offsetFix, df_lb_trial)
-            # Add to the dataframe column with participant number:
+        #     # Add to the dataframe column with participant number:
             df_offsetFix = utilitiesCalc.addParticipantNumberCol(i, df_offsetFix)
             
-            #Plot distance to target and Dispersion
-            plots.distanceToTargetPlot(tracker_type, i, df_lb_trial, df_offsetFix)
-            plots.dispersionGridScatter(tracker_type, i, df_lb_trial, df_offsetFix)
-            plots.precisionScatterScatter(tracker_type, i, df_lb_trial, df_offsetFix)
+            # #Plot distance to target and Dispersion
+            # plots.distanceToTargetPlot(tracker_type, i, df_lb_trial, df_offsetFix)
+            # plots.dispersionGridScatter(tracker_type, i, df_lb_trial, df_offsetFix)
+            # plots.precisionScatterScatter(tracker_type, i, df_lb_trial, df_offsetFix)
 
             df_lb.to_csv('./data/lb_data/fixations_data/p' + str(i) + '_fixations.csv', index = False)
             df_offsetFix.to_csv('./data/lb_data/last_fixation_data/' + str(i) + '_lb_fix.csv', index = False)
-            df_lb_trial.to_csv('./data/lb_data/lb_trial_pp/p' + str(i) + '_trial_pp.csv', index = False)
+            df_lb_trial.to_csv('./data/lb_data/trial_data/p' + str(i) + '_trials.csv', index = False)
 
         # Changing the Eyetracker type to Eyelink
         tracker_type = "el"
@@ -41,7 +41,7 @@ class lastFixLB():
         for i in range(1,counter):
             df_el = pd.read_csv('./data/el_data/el_events/p' + str(i) + '_events.csv')
             df_lb = pd.read_csv('./data/lb_data/fixations_data/p' + str(i) + '_fixations.csv')
-            df_lb_trial = pd.read_csv('./data/lb_data/lb_trial_pp/p' + str(i) + '_trial_pp.csv')
+            df_lb_trial = pd.read_csv('./data/lb_data/trial_data/p' + str(i) + '_trials.csv')
 
 
             for j in task_names:
@@ -57,10 +57,9 @@ class lastFixLB():
             df_offsetFix = utilitiesCalc.addParticipantNumberCol(i, df_offsetFix)
             
         #     #Plot distance to target and Dispersion
-            plots.distanceToTargetPlot(tracker_type, i, df_lb_trial, df_offsetFix)
-            plots.precisionScatterScatter(tracker_type, i, df_lb_trial, df_offsetFix)
-            
-            df_offsetFix
+            # plots.distanceToTargetPlot(tracker_type, i, df_lb_trial, df_offsetFix)
+            # plots.precisionScatterScatter(tracker_type, i, df_lb_trial, df_offsetFix)
+
             df_offsetFix.to_csv('./data/el_data/last_fixation_data/' + str(i) + '_el_fix.csv', index = False)
 
 

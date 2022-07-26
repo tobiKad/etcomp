@@ -108,7 +108,8 @@ class GazeFixationsExport():
             # the LAST reliable trigger
             df_all['Time'] = df_all['Tracker_Time'] - diff_between_end
             tracker_end = df_all.Time.tail(1).values[0]
-
+            
+            
             # Drop not used columns
             df_all = df_all.drop(columns=['Display_Time'])
 
@@ -208,7 +209,6 @@ class GazeFixationsExport():
                     row['End'] = end
 
                     df = df.append(row, ignore_index=True)
-
             # Convert Start and End time using end trigger to unix timestamp
             df['Start'] = abs((df.Start - diff_between_end))
             df['End'] = abs((df.End - diff_between_end) )
@@ -219,6 +219,32 @@ class GazeFixationsExport():
             df.End = df.End.apply(lambda x: '%.0f' % x)
             df.to_csv('./data/el_data/el_events/p' + str(counter) + '_events.csv', index = False)
             print('fixation data saved, for participant =' + str(counter))
+
+            df_blinks = pd.DataFrame(columns = ['Start', 'End'])
+            # Parse event to have the beginning and end time
+            for i in range(len(data_raw)):
+                trial = i+1
+                for j in range(len(data_raw[i]['events']['Eblk'])):
+                    row = { 'Start':0, 'End':0}
+
+                    start = data_raw[i]['events']['Eblk'][j][0]
+                    end = data_raw[i]['events']['Eblk'][j][1]
+
+                    row['Start'] = start
+                    row['End'] = end
+
+                    df_blinks = df_blinks.append(row, ignore_index=True)
+            # Convert Start and End time using end trigger to unix timestamp
+            df_blinks['Start'] = abs((df_blinks.Start - diff_between_end))
+            df_blinks['End'] = abs((df_blinks.End - diff_between_end) )
+            # Interpolate the fixations from starting and ending trigger
+            df_blinks['Start'] = df_blinks['Start'] * a + b
+            df_blinks['End'] = df_blinks['End'] * a + b
+            df_blinks.Start = df_blinks.Start.apply(lambda x: '%.0f' % x)
+            df_blinks.End = df_blinks.End.apply(lambda x: '%.0f' % x)
+            df_blinks.to_csv('./data/el_data/el_events/blinks/p' + str(counter) + '_events.csv', index = False)
+            print('blinks data saved, for participant =' + str(counter))
+
 
 
 

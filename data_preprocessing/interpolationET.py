@@ -24,7 +24,7 @@ def formating_target (df_lb):
     df_lb = df_lb[(df_lb[['timestamp']] != -9999).all(axis=1)]
     # Converting time column to 13 digit number
     df_lb.timestamp = df_lb.timestamp.apply(lambda x: int('%.0f' % x))
-
+    
     return df_lb
 
 def formating_eyelink (df_el):
@@ -32,7 +32,8 @@ def formating_eyelink (df_el):
     df_el['time_el'] = df_el['t']
 
     df_el = df_el.set_index('t')
-
+    ## Removing all missing data rows
+    # df_el = df_el[(df_el[['X_el','Y_el']] != 0).all(axis=1)]
     return df_el
 
 # Takes two parameters df_lb of each EyeTracker
@@ -64,8 +65,6 @@ def syncNoInter(df_el, df_lb):
 
     df_lb_interpolated = df_lb_interpolated.set_index('time_lb')
     return df_lb_interpolated
-
-# %%
 
 
 

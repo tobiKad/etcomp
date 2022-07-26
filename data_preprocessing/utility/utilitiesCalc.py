@@ -26,12 +26,9 @@ def calcOffsetFixation(eyetracker_type,df_trial, df_gaze):
     df_trial['offsetFixation_idx'] = -9999
     for index, row in df_trial.iterrows():
         target_offset = row['target_offset']
-        
     
         beforePreviousFix = df_gaze.loc[df_gaze.ts < target_offset]
-        
-    # print(beforePreviousFix)
-        
+
         offsetfixation = beforePreviousFix.iloc[-1]
         if(offsetfixation.tf > target_offset):
             
@@ -51,30 +48,25 @@ def addParticipantNumberCol(participant_number, df):
     return df
 def formating_timeseries(df_gaze):
     df_gaze = df_gaze.rename({'value': 'x', 'Unnamed: 11': 'y','Unnamed: 12': 'dur','Unnamed: 13': 'ts','Unnamed: 14': 'tf','Unnamed: 15': 'disp'}, axis='columns')
-    # df_gaze = df_gaze[df_gaze['Task_Name'] == 'large_grid']
     df_gaze = df_gaze.sort_values(by ='timestamp' )
+    # df_gaze = df_gaze.dropna()
     df_gaze["ts"] = pd.to_numeric(df_gaze["ts"],downcast='integer')
     df_gaze["tf"] = pd.to_numeric(df_gaze["tf"],downcast='integer')
-    df_gaze["x"] = pd.to_numeric(df_gaze["x"],downcast='integer')
-    df_gaze["y"] = pd.to_numeric(df_gaze["y"],downcast='integer') 
-    # df_gaze = df_gaze.dropna
-
-    # df_gaze["ts"] = df_gaze["ts"].fillna(-9999)
-    # df_gaze["tf"] = df_gaze["tf"].fillna(-9999)
-    # df_gaze.drop(df_gaze.loc[df_gaze["ts"]==-9999].index, inplace=True)
-    # df_gaze.drop(df_gaze.loc[df_gaze["tf"]==-9999].index, inplace=True)
-    df_gaze["ts"] = df_gaze['ts'].apply(lambda x: int('%.0f' % x))
-    df_gaze["tf"] = df_gaze['tf'].apply(lambda x: int('%.0f' % x))
+    # df_gaze["x"] = pd.to_numeric(df_gaze["x"],downcast='integer')
+    # df_gaze["y"] = pd.to_numeric(df_gaze["y"],downcast='integer') 
+    # df_gaze["ts"] = df_gaze['ts'].apply(lambda x: int('%.0f' % x))
+    # df_gaze["tf"] = df_gaze['tf'].apply(lambda x: int('%.0f' % x))
 
     return df_gaze
 def formating_trials(df_trial):
-    # df_trial = df_trial[df_trial['Task_Name'] == 'large_grid']
+    df_trial = df_trial[df_trial['Task_Name'] == 'large_grid']
     df_trial.button_pressed = df_trial.button_pressed.apply(lambda x: int('%.0f' % x))
-    df_trial["targetX"] = pd.to_numeric(df_trial["targetX"],downcast='integer')
-    df_trial["targetY"] = pd.to_numeric(df_trial["targetY"],downcast='integer') 
+    # df_trial["targetX"] = pd.to_numeric(df_trial["targetX"],downcast='integer')
+    # df_trial["targetY"] = pd.to_numeric(df_trial["targetY"],downcast='integer')
     df_trial['target_offset'] = df_trial['StartFrame'] + df_trial['target_visibility_afterTime']
-    df_trial['target_offset'] = df_trial['target_offset'].apply(lambda x: int('%.0f' % x))
-    
+    # df_trial['target_offset'] = df_trial['target_offset'].apply(lambda x: int('%.0f' % x))
+    df_trial['reactionTimeCalc'] = abs(df_trial.random_target_duration - df_trial.reactionTime)
+    df_trial = df_trial[df_trial['reactionTimeCalc'] <= 500]
     return df_trial
 
 def formating_el_data(df):
@@ -98,8 +90,7 @@ def gazetaskParsing(df,df_el, task_name):
     start_df = df.timestamp.head(1).values
     end_df = df.timestamp.tail(1).values
     
-    df_el = df_el[(df_el['Time'] >= start_df[0]) & (df_el['Time'] <= end_df[0])]
-
+    df_el = df_el[(df_el['Time'] >= start_df[0]) & (df_el['Time'] <= end_df[0])]    
     return df_el
 
 def twoMeansDFCreating (lb_mean,el_mean):
@@ -107,3 +98,21 @@ def twoMeansDFCreating (lb_mean,el_mean):
     df_p_m['Labvanced'] = lb_mean
     
     return df_p_m
+
+def pixtoDegrre(df):    
+    from math import atan2, degrees
+    h = 21 # Monitor height in cm
+    l = 42 # Montir length in cm
+    d = 60 # Distance between monitor and participant in cm
+    ver = 900 # Vertical resolution of the monitor
+    hor = 1440
+    # Calculate the number of degrees that correspond to a single pixel. This will
+    # generally be a very small value, something like 0.03.
+    deg_per_px = degrees(atan2(.5*h, d)) / (.5*ver)
+    print('%s degrees correspond to a single pixel horizontal' % deg_per_px)
+
+
+    # Create column with the X and Y in degrees
+    df[['y','targetY','x','targetX','distance']] = df[['y','targetY','x','targetX','distance']] * deg_per_px
+
+    return df

@@ -27,7 +27,12 @@ def resampleData(df):
     # Then change index to converted column and use the function using mean value to resample from 30hz up to 500hz
     df = df.set_index('time_lb')
     # 500hz is 2ms
-    df = df.resample('2ms').interpolate()
+    print("The length of data frame is = "  + str(len(df)))
+    print("any null values here?" + str(df.isnull().values.any()))
+    # df_test = df.dropna()
+    # print("The length of data frame is = "  + str(len(df_test)))
+    df = df.resample('2ms').interpolate(limit_direction="both")
+    # df = df.resample('2ms').interpolate()
     df.index = df.index.astype('int64') // 10** 6
 
     
