@@ -50,7 +50,7 @@ def resampleDataEyelink(df):
     return df
 # Take inteporlated data because we need data with equal index size and same sampling rate
 # As a another argument we pass the array with Lags
-def createLagSygCorrelation(df_interpolated):
+def findLagBetweenEyetrackers(df_interpolated):
     # Use numpy build in function for the cross correlation
     correlation = signal.correlate(df_interpolated.Y_el,df_interpolated.Y_lb,mode='same')
     # create a variable for the lag of the selected participant

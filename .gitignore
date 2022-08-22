@@ -1,5 +1,6 @@
 #ignore data files
 *.asc
+*.ipynb
 *.csv
 *.jpg
 *.jpeg

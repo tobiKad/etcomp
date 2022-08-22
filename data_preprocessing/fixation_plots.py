@@ -241,7 +241,7 @@ def whiskerCountPlotEyetrackers(df, gt,title):
 
     plt.show()
 
-def connectedDottScatter(df, subset, title):
+def compScatter(df, subset, title):
     x_w_m = df['Labvanced']
     y_w_m = df['Eyelink']
 
@@ -252,10 +252,11 @@ def connectedDottScatter(df, subset, title):
         plt.plot([x_w_m[i], y_w_m[i]], [i, i], colors[int(x_w_m[i]<y_w_m[i])])
     plt.plot(x_w_m, np.arange(N), 'ks', markerfacecolor='b', label='Labvanced')
     plt.plot(y_w_m, np.arange(N), 'ro', markerfacecolor='r', label='Eyelink')
-    plt.ylabel('Observation',fontsize=16)
+    plt.ylabel(str(subset) ,fontsize=16)
     plt.xlabel('Mean distance to target (visual degrees)',fontsize=16)
     plt.title(title,fontsize=18)
     plt.legend(fontsize=14)
+    plt.savefig('./analysis_graphs/largeGrid_'+str(subset)+'_comp.jpg')
     plt.show()
 
 def wilcoxonTtest(df, subset):
@@ -312,6 +313,7 @@ def pairSampleTTest(df, subset):
     plt.legend(loc='upper right')
     subset
     plt.title("Normality Distribution Histogram")
+    plt.savefig('./analysis_graphs/largeGrid_participant_normTTest.jpg')
     # fig.text(.5, 0.9, txt, ha='center')
     plt.show()
 def centroidDistanceScatter(df_lb, df_el, df_trials, subset):
@@ -370,3 +372,89 @@ def centroidDistanceScatter(df_lb, df_el, df_trials, subset):
     plt.ylabel('y coordinates in visual degrees',fontsize=16)
     
     plt.show()
+
+    
+def spatialDivionScatter(df_inner, df_outer):
+    
+    #inner
+    plt.figure(figsize =(8, 6) )
+    
+    ax1 = plt.subplot(1, 2, 1)
+    ax1.set(ylim=(0, 2.3))
+#     plt.figure(figsize =(7, 12) )
+#     plt.title('Accuracy: Two Eyetrackers comparison in distance to target \n between inner and outer side of the screen',loc='left', fontsize=24)
+    vals, names, xs = [],[],[]
+    for i, col in enumerate(df_inner.columns):
+        vals.append(df_inner[col].values)
+        names.append(col)
+        xs.append(np.random.normal(i + 1, 0.04, df_inner[col].values.shape[0]))  # adds jitter to the data points - can be adjusted
+    plt.boxplot(vals, labels=names, medianprops=medianprops, meanprops = meanprops, showmeans=True, showbox=False)
+    palette = ['r', 'b']
+    for x, val, c in zip(xs, vals, palette):
+        plt.scatter(x, val, alpha=0.4, color=c)
+    plt.xlabel("Inner Targets", fontweight='normal', fontsize=14)
+    plt.ylabel("Mean distance to target (visual degrees)", fontweight='normal', fontsize=14) 
+    
+    #Outer
+    ax3 = plt.subplot(1,2,2, sharey = ax1)
+    
+    vals, names, xs = [],[],[]
+    for i, col in enumerate(df_outer.columns):
+        vals.append(df_outer[col].values)
+        names.append(col)
+        xs.append(np.random.normal(i + 1, 0.04, df_outer[col].values.shape[0]))  # adds jitter to the data points - can be adjusted
+    plt.boxplot(vals, labels=names, medianprops=medianprops, meanprops = meanprops, showmeans=True, showbox=False)
+    palette = ['r', 'b']
+    for x, val, c in zip(xs, vals, palette):
+        plt.scatter(x, val, alpha=0.4, color=c)
+    
+    plt.xlabel("Outer Targets", fontweight='normal', fontsize=14)
+    
+    
+    sns.despine(bottom=True) # removes right and top axis lines
+#     plt.axhline(y=65, color='#ff3300', linestyle='--', linewidth=1, label='Threshold Value')
+    # plt.legend(bbox_to_anchor=(0.31, 1.06), loc=2, borderaxespad=0., framealpha=1, facecolor ='white', frameon=True)
+    
+    plt.savefig('./analysis_graphs/largeGrid_spatial_comp.jpg')
+    plt.show()
+# def temporalDivionScatterr(df_inner, df_outer):
+def temporalDivionScatter(df_fhalf_m, df_shalf_m):
+    plt.figure(figsize =(8, 6) )
+    ax1 = plt.subplot(1, 2, 1)
+    ax1.set(ylim=(0, 2.3))
+    #     plt.figure(figsize =(7, 12) )
+    # plt.title('Accuracy',loc='left',fontsize=22)
+    vals, names, xs = [],[],[]
+    for i, col in enumerate(df_fhalf_m.columns):
+        vals.append(df_fhalf_m[col].values)
+        names.append(col)
+        xs.append(np.random.normal(i + 1, 0.04, df_fhalf_m[col].values.shape[0]))  # adds jitter to the data points - can be adjusted
+    plt.boxplot(vals, labels=names, medianprops=medianprops, meanprops = meanprops, showmeans=True, showbox=False)
+    palette = ['r', 'b']
+    for x, val, c in zip(xs, vals, palette):
+        plt.scatter(x, val, alpha=0.4, color=c)
+    plt.xlabel("1/2 Experiment", fontweight='normal', fontsize=14)
+    plt.ylabel("Mean distance to target (visual degrees)", fontweight='normal', fontsize=14) 
+    ax3 = plt.subplot(1,2,2, sharey = ax1)
+    ax3.set(ylim=(0, 2.3))
+    vals, names, xs = [],[],[]
+    for i, col in enumerate(df_shalf_m.columns):
+        vals.append(df_shalf_m[col].values)
+        names.append(col)
+        xs.append(np.random.normal(i + 1, 0.04, df_shalf_m[col].values.shape[0]))  # adds jitter to the data points - can be adjusted
+    plt.boxplot(vals, labels=names, medianprops=medianprops, meanprops = meanprops, showmeans=True, showbox=False)
+    palette = ['r', 'b']
+    for x, val, c in zip(xs, vals, palette):
+        plt.scatter(x, val, alpha=0.4, color=c)
+
+    plt.xlabel("2/2 Experiment", fontweight='normal', fontsize=14)
+
+
+    sns.despine(bottom=True) # removes right and top axis lines
+    #     plt.axhline(y=65, color='#ff3300', linestyle='--', linewidth=1, label='Threshold Value')
+    # plt.legend(bbox_to_anchor=(0.31, 1.06), loc=2, borderaxespad=0., framealpha=1, facecolor ='white', frameon=True)
+
+    plt.savefig('./analysis_graphs/largeGrid_temporal_comp.jpg')
+    plt.show()
+    
+    

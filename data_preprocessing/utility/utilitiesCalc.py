@@ -116,3 +116,22 @@ def pixtoDegrre(df):
     df[['y','targetY','x','targetX','distance']] = df[['y','targetY','x','targetX','distance']] * deg_per_px
 
     return df
+
+def formating_labvanced (df_lb):
+    # Renaming the columns
+    df_lb = df_lb.rename(columns={"value":"X_lb","Unnamed: 11":"Y_lb","Unnamed: 12":"time_lb","Unnamed: 13":'c'})
+    # Fill NaN with visible and large number
+    df_lb['time_lb'] = df_lb['time_lb'].fillna(-9999)
+    df_lb = df_lb[(df_lb[['time_lb']] != -9999).all(axis=1)]
+    # Converting time column to 13 digit number
+    df_lb.time_lb = df_lb.time_lb.apply(lambda x: int('%.0f' % x))
+    return df_lb
+
+def formating_eyelink (df_el):
+    df_el = df_el.rename(columns={'X':'X_el','Y':'Y_el','Time':'t'})
+    df_el['time_el'] = df_el['t']
+
+    df_el = df_el.set_index('t')
+    ## Removing all missing data rows
+    # df_el = df_el[(df_el[['X_el','Y_el']] != 0).all(axis=1)]
+    return df_el

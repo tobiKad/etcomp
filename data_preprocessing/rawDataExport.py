@@ -19,22 +19,21 @@ class GazeFixationsExport():
         ## Internal libraries
         from data_preprocessing import interpolationET
         from data_preprocessing import cross_correlation
-        from data_preprocessing import fixation_plots
+        from data_preprocessing.utility import utilitiesCalc
 
         # Loading data files from the directory
+        # for files in sorted(glob.glob("./ascData/p*.asc"),key=os.path.getmtime):
+        #     # Loop over files to estgablish counter and print to the consol to see if there are all participants.
+        #     print('loading subject file - ' + str(files))
+        #     counter = 0
         for files in sorted(glob.glob("./ascData/p*.asc"),key=os.path.getmtime):
-
-            print('loading subject file - ' + str(files))
-
-            counter = 0
-        for files in sorted(glob.glob("./ascData/p*.asc"),key=os.path.getmtime):
+            # Add to counter = 0 one (starting for rist participant)
             counter = counter +1
             # Extract Raw Data
             data = files
-
             data_raw = read_edf(data, 'START', missing=0.0, debug=False)
+            # Debug function give more detail output, missing for replacing 0.0 as default value.
             type(data_raw), len(data_raw), type(data_raw[0]), data_raw[0].keys()
-
             #     Open Asci data and create a list 'lines' with each row line from the ASC data
             asci_data = open(data, 'r')
             lines = []
@@ -42,18 +41,17 @@ class GazeFixationsExport():
                 lines.append(line)
             # Iterate for each row
             for idx, line in enumerate(lines):
+                # poczatek = start recording
                 if 'poczatek' in line:
                     time_line = lines[idx].split()      
                     break
-
             # Retrieve machine EYelink time in ms
             eyelink_time_start = int(time_line[1])
             print("Eyelink machine start time in ms " + str(eyelink_time_start))
-
             # Splitting text and number in string 
             display_split_unix = [re.findall(r'[\d\.\d]+', time_line[-1])[0] ]
-            tracker_start = [re.findall(r'[\d\.\d]+', time_line[1])[0] ]
-            tracker_start = int(float(tracker_start[0]))
+            # tracker_start_arr = [re.findall(r'[\d\.\d]+', time_line[1])[0] ]
+            # tracker_start = int(float(tracker_start_arr[0]))
             # # #Converting to miliseconds
             display_time_ml_start = int(float(display_split_unix[0]) * 1000)
             print("Eyelink machine start time in UNIX ms " + str(display_time_ml_start))
@@ -64,7 +62,7 @@ class GazeFixationsExport():
                     time_line = lines[idx].split()
                     break
 
-            eyelink_time_end = int(time_line[1])
+            # eyelink_time_end = int(time_line[1])
 
             display_split = time_line[-1]
             display_split
@@ -92,51 +90,39 @@ class GazeFixationsExport():
                 x = x + list(data_raw[i]['x'])
                 y = y + list(data_raw[i]['y'])
                 time = time + list(data_raw[i]['trackertime'])
-
-            #Checking if there are nan values
-
             df_all.X = x
             df_all.Y = y
             df_all.Tracker_Time = time
             df_all.Display_Time = np.nan
-
-            # Compute the time for Eyelink substracting the last and first trigger time in ms from Unix timestamp
+            # Compute the time for Eyelink subtracting the last and first trigger time in ms from Unix timestamp
             diff_between_end = tracker_end - display_time_ml_end
-            diff_between_start = tracker_start - display_time_ml_start
-
             # Then take this difference and subtract from all trackers time, then you would adjust the timestamp to 
-            # the LAST reliable trigger
+            # the LAST "reliable" trigger
             df_all['Time'] = df_all['Tracker_Time'] - diff_between_end
             tracker_end = df_all.Time.tail(1).values[0]
-            
-            
             # Drop not used columns
             df_all = df_all.drop(columns=['Display_Time'])
-
-            ## LOAD, FORMAT AND RESAMPLE up to 300hz LABVANCED DATA
+            ## Load Labvanced Data
             lb = pd.read_csv('./data/lb_data/timeseries_data/p'+ str(counter) + '_XYTC.csv')
-            # Format to change the column name and remove between trials empty columns
-            lb = interpolationET.formating_labvanced(lb)
-            lb = lb.sort_values(by=['time_lb'])
-
+            # From UtilityCalc we could take function to format lb to proper dataframe.
+            lb = utilitiesCalc.formating_labvanced(lb).sort_values(by=['time_lb'])
             lb_resampled = cross_correlation.resampleData(lb)
-
             lb_resampled = lb_resampled[lb_resampled['timestamp'].notna()]
 
-            # FORMAT AND RESAMPLE up to 300hz EYELINK
-            el = interpolationET.formating_eyelink(df_all)
+            # FORMAT AND RESAMPLE up to 500hz EYELINK
+            el = utilitiesCalc.formating_eyelink(df_all)
+            # Nowe also resample Eyelink
             el_resampled = cross_correlation.resampleDataEyelink(el)
-
             # Interpolate data to have equal size of the index and preparing it for the crosslag correlation:
             df_interpolated = interpolationET.interpolation (el_resampled, lb_resampled)
             # # Reset index to take off the timestamp column
             df_interpolated = df_interpolated.reset_index()
 
             # Calculating delay between two eyetrackers
-            delay = cross_correlation.createLagSygCorrelation(df_interpolated)
+            delay = cross_correlation.findLagBetweenEyetrackers(df_interpolated)
             # Convert lag to ms
             ms_delay = delay*2
-            print("Delay between Labvanced 300hz and Eyelink 300hz resampled = " + str(ms_delay))
+            print("Delay between Labvanced 500hz and Eyelink 500hz resampled = " + str(ms_delay))
             # Take the first Labvanced Timestamp this is the trigger which we did fix
             display_time_ml_start_first_task = df_interpolated.time_lb.head(1).values[0]
             # Fix the tracker start based on the Labvanced trigger + miliseconds_delay(lag)
@@ -197,7 +183,6 @@ class GazeFixationsExport():
                 trial = i+1
                 for j in range(len(data_raw[i]['events']['Efix'])):
                     row = { 'x':0, 'y':0, 'Start':0, 'End':0}
-
                     x = data_raw[i]['events']['Efix'][j][3]
                     y = data_raw[i]['events']['Efix'][j][4]
                     start = data_raw[i]['events']['Efix'][j][0]
@@ -245,6 +230,36 @@ class GazeFixationsExport():
             df_blinks.to_csv('./data/el_data/el_events/blinks/p' + str(counter) + '_events.csv', index = False)
             print('blinks data saved, for participant =' + str(counter))
 
+            # extract saccads
+            df_saccads = pd.DataFrame(columns = ['ex', 'ey','sx', 'sy', 'Start', 'End'])
 
+            for i in range(len(data_raw)):
+                trial = i+1
+                for j in range(len(data_raw[i]['events']['Esac'])):
+                    row = { 'ex':0, 'ey':0, 'sx':0, 'sy':0, 'Start':0, 'End':0}
+                    
+                    ex = data_raw[i]['events']['Esac'][j][5]
+                    ey = data_raw[i]['events']['Esac'][j][6]
+                    sx = data_raw[i]['events']['Esac'][j][3]
+                    sy = data_raw[i]['events']['Esac'][j][4]
+                    start = data_raw[i]['events']['Esac'][j][0]
+                    end = data_raw[i]['events']['Esac'][j][1]
 
+                    row['ex'] = ex
+                    row['ey'] = ey
+                    row['sx'] = sx
+                    row['sy'] = sy
+                    row['Start'] = start
+                    row['End'] = end
 
+                    df_saccads = df_saccads.append(row, ignore_index=True)
+            # Convert Start and End time using end trigger to unix timestamp
+            df_saccads['Start'] = abs((df_saccads.Start - diff_between_end))
+            df_saccads['End'] = abs((df_saccads.End - diff_between_end) )
+            # Interpolate the fixations from starting and ending trigger
+            df_saccads['Start'] = df_saccads['Start'] * a + b
+            df_saccads['End'] = df_saccads['End'] * a + b
+            df_saccads.Start = df_saccads.Start.apply(lambda x: '%.0f' % x)
+            df_saccads.End = df_saccads.End.apply(lambda x: '%.0f' % x)
+            df_saccads.to_csv('./data/el_data/el_events/saccads/p' + str(counter) + '_events.csv', index = False)
+            print('saccads data saved, for participant =' + str(counter))

@@ -7,16 +7,7 @@ import seaborn as sns
 import scipy.stats as stats
 sns.set_context('talk',font_scale=.8)
 
-def formating_labvanced (df_lb):
-    # Renaming the columns
-    df_lb = df_lb.rename(columns={"value":"X_lb","Unnamed: 11":"Y_lb","Unnamed: 12":"time_lb","Unnamed: 13":'c'})
-    df_lb['time_lb'] = df_lb['time_lb'].fillna(-9999)
-    df_lb = df_lb[(df_lb[['time_lb']] != -9999).all(axis=1)]
-    # Converting time column to 13 digit number
-    df_lb.time_lb = df_lb.time_lb.apply(lambda x: int('%.0f' % x))
 
-
-    return df_lb
 def formating_target (df_lb):
     # Renaming the columns
     df_lb = df_lb.rename(columns={"value":"A","Unnamed: 11":"V","Unnamed: 12":"Y_target","Unnamed: 13":'X_target'})
@@ -26,15 +17,6 @@ def formating_target (df_lb):
     df_lb.timestamp = df_lb.timestamp.apply(lambda x: int('%.0f' % x))
     
     return df_lb
-
-def formating_eyelink (df_el):
-    df_el = df_el.rename(columns={'X':'X_el','Y':'Y_el','Time':'t'})
-    df_el['time_el'] = df_el['t']
-
-    df_el = df_el.set_index('t')
-    ## Removing all missing data rows
-    # df_el = df_el[(df_el[['X_el','Y_el']] != 0).all(axis=1)]
-    return df_el
 
 # Takes two parameters df_lb of each EyeTracker
 def interpolation (df_el, df_lb):
