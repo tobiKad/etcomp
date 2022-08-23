@@ -4,8 +4,8 @@
 *.csv
 *.jpg
 *.jpeg
+*.pyc
 *data
 *ascData
 *PyGazeAnalyser-master
-*data_processing
 *notebooks
