@@ -15,14 +15,12 @@ class LargeGridPrec():
         import seaborn as sns
         from scipy.stats.mstats import winsorize
         from scipy.stats import sem
-        import statistics as stat
 
         ### Import our libraries
         # some_file.py
         import sys
         # insert at 1, 0 is the script path (or '' in REPL)
         sys.path.insert(1, '../data_preprocessing/')
-        from data_preprocessing import fixation_plots as plots
         from data_preprocessing.utility import utilitiesCalc
         import warnings
         warnings.filterwarnings('ignore')

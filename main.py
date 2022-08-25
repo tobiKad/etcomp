@@ -1,5 +1,5 @@
-from data_preprocessing import rawDataExport, lastFixLB, headRawDataExport
-from data_preprocessing import utility, calibration
+from data_preprocessing import rawDataExport, lastFixLB, headRawDataExport, spPreProcessing, fvPreProcessing
+from data_preprocessing import utility
 from data_processing import largeGridPrec, largeGridAcc, smoothPursuit
 # from data_processing import fixationAnalysisLG
 
@@ -16,10 +16,14 @@ from data_processing import largeGridPrec, largeGridAcc, smoothPursuit
 
 print('Running the Larger Grid Fixations analysis')
 # largeGridAcc.LargeGridAcc()
-largeGridPrec.LargeGridPrec()
+# largeGridPrec.LargeGridPrec()
 # largeGridPrecAnova.LargeGridPrecANOVA()
 
 print('Running the Smooth Pursuit analysis')
-# smoothPursuit.SmoothPursuit()
+# spPreProcessing.SpPre()
+smoothPursuit.SmoothPursuit()
 
+print('Running Free View Analysis')
+# fvPreProcessing.FvPre()
+# freeView.FreeView()
 ##Etc

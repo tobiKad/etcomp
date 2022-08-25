@@ -64,7 +64,6 @@ def formating_trials(df_trial):
     # df_trial["targetX"] = pd.to_numeric(df_trial["targetX"],downcast='integer')
     # df_trial["targetY"] = pd.to_numeric(df_trial["targetY"],downcast='integer')
     df_trial['target_offset'] = df_trial['StartFrame'] + df_trial['target_visibility_afterTime']
-    # df_trial['target_offset'] = df_trial['target_offset'].apply(lambda x: int('%.0f' % x))
     df_trial['reactionTimeCalc'] = abs(df_trial.random_target_duration - df_trial.reactionTime)
     df_trial = df_trial[df_trial['reactionTimeCalc'] <= 500]
     return df_trial
@@ -135,3 +134,12 @@ def formating_eyelink (df_el):
     ## Removing all missing data rows
     # df_el = df_el[(df_el[['X_el','Y_el']] != 0).all(axis=1)]
     return df_el
+def formating_target (df_lb):
+    # Renaming the columns
+    df_lb = df_lb.rename(columns={"value":"A","Unnamed: 11":"V","Unnamed: 12":"Y_target","Unnamed: 13":'X_target'})
+    df_lb['timestamp'] = df_lb['timestamp'].fillna(-9999)
+    df_lb = df_lb[(df_lb[['timestamp']] != -9999).all(axis=1)]
+    # Converting time column to 13 digit number
+    df_lb.timestamp = df_lb.timestamp.apply(lambda x: int('%.0f' % x))
+    
+    return df_lb
