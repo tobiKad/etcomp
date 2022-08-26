@@ -7,7 +7,7 @@ class SpPre():
          ## To switch off the error about the older versions.
         import warnings
         warnings.filterwarnings('ignore')
-        counter = 22
+        counter = 24
 
         subject = 0
         el_blinks = pd.DataFrame()
@@ -36,7 +36,7 @@ class SpPre():
             
             lb_gaze_data_all = len(lb_gaze)
             perc_loss_lb = len(lb_under_threshold)/lb_gaze_data_all * 100
-            print('Labvanced: for subject = ' +str(i) + 'data loss in % =' + str(perc_loss_lb))
+            # print('Labvanced: for subject = ' +str(i) + 'data loss in % =' + str(perc_loss_lb))
             perc_loss_lb_arr.append(perc_loss_lb)
             mean_data_loss_lb = np.mean(perc_loss_lb_arr)
             

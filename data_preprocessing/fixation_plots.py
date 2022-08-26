@@ -178,7 +178,7 @@ def twoGroupsComparisonScatter(df, gt, title):
         ax.plot(df_x_jitter[col], df[col], 'o', alpha=.60, zorder=1, ms=8, mew=1)
     ax.set_xticks(range(len(df.columns)))
     ax.set_xticklabels(df.columns, fontsize=16)
-    ax.set_xlim(-0.5,len(df.columns)-0.5)
+    ax.set_xlim(range(len(df.columns)))
     ax.set_title(title, fontsize=16)
     ax.set_ylabel(str(gt) + ' of euclidian distance from fixation \n centroid to target in visual degrees', fontsize=16)
     
@@ -250,6 +250,7 @@ def compScatter(df, subset, title):
     fig, ax = plt.subplots(1, figsize=(8,6))
     for i in range(N):
         plt.plot([x_w_m[i], y_w_m[i]], [i, i], colors[int(x_w_m[i]<y_w_m[i])])
+    ax.set_yticks(range(N) )
     plt.plot(x_w_m, np.arange(N), 'ks', markerfacecolor='b', label='Labvanced')
     plt.plot(y_w_m, np.arange(N), 'ro', markerfacecolor='r', label='Eyelink')
     plt.ylabel(str(subset) ,fontsize=16)
@@ -267,7 +268,7 @@ def wilcoxonTtest(df, subset):
     t, p = stats.wilcoxon(df['Labvanced'], df['Eyelink'])
     x_w_m = df['Labvanced']
     y_w_m = df['Eyelink']
-    p = "{:.3e}".format(p)
+    # p = "{:.3e}".format(p)
     lsem = sem(df['Labvanced'])
     
     esem = sem(df['Eyelink'])
@@ -294,7 +295,7 @@ def pairSampleTTest(df, subset):
     el_shapiro_norm_W = stats.shapiro(df['Eyelink'])
     #         pair_tTest = stats.ttest_rel(df['Labvanced'], df['Eyelink'])
     t, p = stats.ttest_rel(df['Labvanced'], df['Eyelink'])
-    p = '{:.6f}'.format(p)
+    # p = '{:.6f}'.format(p)
     print('Normality for Labvanced' + str(lb_shapiro_norm_W))
     print('Normality for Eyelink' + str(el_shapiro_norm_W))
     print('Labvanced Grand Mean over all M=' + str(df['Labvanced'].mean()) + 'and  SD=' + str(df['Labvanced'].std()))

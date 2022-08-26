@@ -161,7 +161,9 @@ class LargeGridAcc():
         # Means Value
         lb_means_patricipant = lb_grouped_participant['distance'].mean().reset_index(drop=True)
         el_means_patricipant = el_grouped_participant['distance'].mean().reset_index(drop=True)
-
+        lb_std_patricipant = lb_grouped_participant['distance'].std().reset_index(drop=True)
+        el_std_patricipant = el_grouped_participant['distance'].std().reset_index(drop=True)
+        print('Accuracy Labvanced M=' +str(lb_means_patricipant.mean()) + ' SD='+ str(lb_std_patricipant.mean()) + 'Eyelink M=' +str(el_means_patricipant.mean()) + ' SD='+ str(el_std_patricipant.mean()))
         ## Create DataFrame for grouped by participants
         # This function create matrix N(participants)x2 where columns are Eyelink and Labvanced and rows are pariticpants.
         # Be careful with providing arguments to the function because you mind swap the means and Eyetracker labels!!!
@@ -172,7 +174,7 @@ class LargeGridAcc():
         subset = 'Participants'
         plots.compScatter(df_p_m, subset, title)
         # Shapiro + T-Test
-        # plots.pairSampleTTest(df_p_m, subset)
+        plots.pairSampleTTest(df_p_m, subset)
 
         ### INNER AND OUTER ANALYSIS ###
 
@@ -261,4 +263,4 @@ class LargeGridAcc():
 
         ### ANOVA COMPARISON ###
         df_anova = df_anova.rename(columns={'trial_division':'temporal division','target_lock':'spatial division','Eytracker_type':'eyetracker type'})
-        print(pg.anova(data=df_anova, dv='distance', between=['temporal division','spatial division','eyetracker type'], detailed=True).round(3))
+        print(pg.anova(data=df_anova, dv='distance', between=['temporal division','spatial division','eyetracker type'], detailed=True))

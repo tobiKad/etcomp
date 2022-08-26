@@ -8,7 +8,7 @@ class FvPre():
         # insert at 1, 0 is the script path (or '' in REPL)
         sys.path.insert(1, '../data_preprocessing/')
         from data_preprocessing.utility import utilitiesCalc
-        counter = 22
+        counter = 24
         subject = 0
         el_blinks = pd.DataFrame()
         s_gaze = 0

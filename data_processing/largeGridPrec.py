@@ -4,18 +4,11 @@ class LargeGridPrec():
         import pandas as pd
         import numpy as np
         import matplotlib.pyplot as plt
-        from matplotlib.pyplot import cm
-        from matplotlib.lines import Line2D
-        from scipy import stats
         import glob
         import os
         # pd.set_option('display.max_rows', 500)
-        from scipy.stats import gaussian_kde
-        from scipy.stats import sem
         import seaborn as sns
-        from scipy.stats.mstats import winsorize
         from scipy.stats import sem
-
         ### Import our libraries
         # some_file.py
         import sys
@@ -28,13 +21,6 @@ class LargeGridPrec():
         ### graph setting
         ##### Set style options here #####
         sns.set_style("whitegrid")  # "white","dark","darkgrid","ticks"
-        boxprops = dict(linestyle='-', linewidth=1.5, color='#00145A')
-        flierprops = dict(marker='o', markersize=7,
-                        linestyle='none')
-        whiskerprops = dict(color='#00145A')
-        capprops = dict(color='#00145A')
-        medianprops = dict(linewidth=4, linestyle='-', color='green')
-        meanprops=dict(marker="s" ,markerfacecolor="yellow", markersize=10, markeredgecolor="blue")
         # meanprops = dict("marker":"s","markerfacecolor":"white", "markeredgecolor":"blue")
 
         fixations = []
@@ -192,27 +178,27 @@ class LargeGridPrec():
         plt.title("Precision",fontsize=18)
         plt.legend()
         print('EYELINK')
-        print('X Inner std of std for Eyelink = ' + str(format(round(inner_el_std_std_x, 2))))
-        print('X Outer std of std for Eyelink = ' + str(format(round(outer_el_std_std_x, 2))))
-        print('X Inner means of std for Eyelink = ' + str(format(round(el_inner_FixELTrial_means_x, 2))))
-        print('X Outer means of std for Eyelink = ' + str(format(round(outer_FixELTrial_means_x, 2))))
-        print('Y Inner std of std for Eyelink = ' + str(format(round(inner_el_std_std_y, 2))))
-        print('Y Outer std of std for Eyelink = ' + str(format(round(outer_el_std_std_y, 2))))
-        print('Y Inner means of std for Eyelink = ' + str(format(round(el_inner_FixELTrial_means_y, 2))))
-        print('Y Outer means of std for Eyelink = ' + str(format(round(outer_FixELTrial_means_y, 2))))
+        print('X Inner std of std for Eyelink = ' + str(format(round(inner_el_std_std_x, 3))))
+        print('X Outer std of std for Eyelink = ' + str(format(round(outer_el_std_std_x, 3))))
+        print('X Inner means of std for Eyelink = ' + str(format(round(el_inner_FixELTrial_means_x, 3))))
+        print('X Outer means of std for Eyelink = ' + str(format(round(outer_FixELTrial_means_x, 3))))
+        print('Y Inner std of std for Eyelink = ' + str(format(round(inner_el_std_std_y, 3))))
+        print('Y Outer std of std for Eyelink = ' + str(format(round(outer_el_std_std_y, 3))))
+        print('Y Inner means of std for Eyelink = ' + str(format(round(el_inner_FixELTrial_means_y, 3))))
+        print('Y Outer means of std for Eyelink = ' + str(format(round(outer_FixELTrial_means_y, 3))))
      
         print('LABVANCED')
         # More Output to print
-        print('X Inner std of std for Labvanced = ' + str(format(round(inner_lb_std_std_x, 2))))
-        print('X Outer std of std for Labvanced = ' + str(format(round(outer_lb_std_std_x, 2))))
-        print('X Inner means of std for Labvanced = ' + str(format(round(inner_FixLBTrial_means_x, 2))))
-        print('X Outer means of std for Labvanced = ' + str(format(round(outer_FixLBTrial_means_x, 2))))
-        print('Y Inner std of std for Labvanced = ' + str(format(round(inner_lb_std_std_y, 2))))
-        print('Y Outer std of std for Labvanced = ' + str(format(round(outer_lb_std_std_y, 2))))
-        print('Y Inner means of std for Labvanced = ' + str(format(round(inner_FixLBTrial_means_y, 2))))
-        print('Y Outer means of std for Labvanced = ' + str(format(round(outer_FixLBTrial_means_y, 2))))
-        print('X Inner std of std for Labvanced = ' + str(format(round(inner_el_std_std_x, 2))))
-        print('X Outer std of std for Labvanced = ' + str(format(round(outer_el_std_std_x, 2))))
+        print('X Inner std of std for Labvanced = ' + str(format(round(inner_lb_std_std_x, 3))))
+        print('X Outer std of std for Labvanced = ' + str(format(round(outer_lb_std_std_x, 3))))
+        print('X Inner means of std for Labvanced = ' + str(format(round(inner_FixLBTrial_means_x, 3))))
+        print('X Outer means of std for Labvanced = ' + str(format(round(outer_FixLBTrial_means_x, 3))))
+        print('Y Inner std of std for Labvanced = ' + str(format(round(inner_lb_std_std_y, 3))))
+        print('Y Outer std of std for Labvanced = ' + str(format(round(outer_lb_std_std_y, 3))))
+        print('Y Inner means of std for Labvanced = ' + str(format(round(inner_FixLBTrial_means_y, 3))))
+        print('Y Outer means of std for Labvanced = ' + str(format(round(outer_FixLBTrial_means_y, 3))))
+        print('X Inner std of std for Labvanced = ' + str(format(round(inner_el_std_std_x, 3))))
+        print('X Outer std of std for Labvanced = ' + str(format(round(outer_el_std_std_x, 3))))
         plt.savefig('./analysis_graphs/largeGrid_prec_spatial.jpg')
         plt.show()
 
@@ -253,9 +239,10 @@ class LargeGridPrec():
         # plt.xlabel("Groups", fontsize=14)
         plt.ylabel("visual degree [std]", fontsize=14)
         plt.title("Precision",fontsize=16)
-        plt.savefig('./analysis_graphs/largeGrid_prec_grand.jpg')
+        
         plt.legend()
-
+        plt.savefig('./analysis_graphs/largeGrid_prec_grand.jpg')
+        plt.show()
         ## ANOVA
         lb_fix['Eytracker_type'] = 'labvanced'
         el_fix['Eytracker_type'] = 'Eyelink'
@@ -319,6 +306,6 @@ class LargeGridPrec():
 
         import pingouin as pg
         print('Anova for X coordinates')
-        print(pg.anova(data=df_anova_x, dv='x', between=['Eye Tracker Type','Spatial Division'], detailed=True).round(3))
+        print(pg.anova(data=df_anova_x, dv='x', between=['Eye Tracker Type','Spatial Division'], detailed=True))
         print('Anova for Y coordinates')
-        print(pg.anova(data=df_anova_y, dv='y', between=['Eye Tracker Type','Spatial Division'], detailed=True).round(3))
+        print(pg.anova(data=df_anova_y, dv='y', between=['Eye Tracker Type','Spatial Division'], detailed=True))

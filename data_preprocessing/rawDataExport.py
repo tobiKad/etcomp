@@ -22,10 +22,10 @@ class GazeFixationsExport():
         from data_preprocessing.utility import utilitiesCalc
 
         # Loading data files from the directory
-        # for files in sorted(glob.glob("./ascData/p*.asc"),key=os.path.getmtime):
-        #     # Loop over files to estgablish counter and print to the consol to see if there are all participants.
-        #     print('loading subject file - ' + str(files))
-        #     counter = 0
+        for files in sorted(glob.glob("./ascData/p*.asc"),key=os.path.getmtime):
+            # Loop over files to estgablish counter and print to the consol to see if there are all participants.
+            print('loading subject file - ' + str(files))
+            counter = 0
         for files in sorted(glob.glob("./ascData/p*.asc"),key=os.path.getmtime):
             # Add to counter = 0 one (starting for rist participant)
             counter = counter +1
@@ -137,13 +137,13 @@ class GazeFixationsExport():
             df_all['Time'] = abs(df_all['Time'] * a + b)
             df_all.to_csv('./data/el_data/p' + str(counter) + '.csv', index = False)
             # Here we RE-NAME the column Time which we just correct with time_el, which is valid for other functions.
-            el_crossCorrelated = interpolationET.formating_eyelink(df_all)
+            el_crossCorrelated = utilitiesCalc.formating_eyelink(df_all)
 
             ## Now we load data once again because we only wanted to resample data for the cross correlation,
             # Now we want to interpolate with data with the Labvanced 30Hz frame rate.
             lb_30hz = pd.read_csv('./data/lb_data/timeseries_data/p' + str(counter) + '_XYTC.csv')
 
-            lb_30hz = interpolationET.formating_labvanced(lb_30hz)
+            lb_30hz = utilitiesCalc.formating_labvanced(lb_30hz)
             lb_30hz = lb_30hz.set_index('time_lb')
             # Sorting data to have large grid as a first
             lb_30hz = lb_30hz.sort_index(ascending=True)
@@ -156,7 +156,7 @@ class GazeFixationsExport():
             df_interpolated.sort_index(ascending=True)
         #     df_interpolated.reset_index(inplace=True)
 
-            delay = cross_correlation.createLagSygCorrelation(df_interpolated)
+            delay = cross_correlation.findLagBetweenEyetrackers(df_interpolated)
             ms_delay = delay*2
             print("Lag after cross correlation and inteporlation is = " + str(ms_delay))
             from math import atan2, degrees

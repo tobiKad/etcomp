@@ -19,8 +19,7 @@ class HeadExporter():
         ## Internal libraries
         from data_preprocessing import interpolationET
         from data_preprocessing import cross_correlation
-        from data_preprocessing import fixation_plots
-
+        from data_preprocessing.utility import utilitiesCalc
         # Loading data files from the directory
         for files in sorted(glob.glob("./ascData/head_movments_data/*.asc"),key=os.path.getmtime):
 
@@ -114,7 +113,7 @@ class HeadExporter():
             ## LOAD, FORMAT AND RESAMPLE up to 300hz LABVANCED DATA
             lb = pd.read_csv('./data/lb_data/head_gaze/p'+ str(counter) + '_XYTC.csv')
             # Format to change the column name and remove between trials empty columns
-            lb = interpolationET.formating_labvanced(lb)
+            lb = utilitiesCalc.formating_labvanced(lb)
             lb = lb.sort_values(by=['time_lb'])
 
             lb_resampled = cross_correlation.resampleData(lb)
@@ -122,7 +121,7 @@ class HeadExporter():
             lb_resampled = lb_resampled[lb_resampled['timestamp'].notna()]
 
             # FORMAT AND RESAMPLE up to 300hz EYELINK
-            el = interpolationET.formating_eyelink(df_all)
+            el = utilitiesCalc.formating_eyelink(df_all)
             el_resampled = cross_correlation.resampleDataEyelink(el)
 
             # Interpolate data to have equal size of the index and preparing it for the crosslag correlation:
@@ -131,7 +130,7 @@ class HeadExporter():
             df_interpolated = df_interpolated.reset_index()
 
             # Calculating delay between two eyetrackers
-            delay = cross_correlation.createLagSygCorrelation(df_interpolated)
+            delay = cross_correlation.findLagBetweenEyetrackers(df_interpolated)
             # Convert lag to ms
             ms_delay = delay*2
             print("Delay between Labvanced 300hz and Eyelink 300hz resampled = " + str(ms_delay))
@@ -149,13 +148,13 @@ class HeadExporter():
             df_all['Time'] = abs(df_all['Time'] * a + b)
             df_all.to_csv('./data/el_data/head_movments/p' + str(counter) + '.csv', index = False)
             # Here we RE-NAME the column Time which we just correct with time_el, which is valid for other functions.
-            el_crossCorrelated = interpolationET.formating_eyelink(df_all)
+            el_crossCorrelated = utilitiesCalc.formating_eyelink(df_all)
 
             ## Now we load data once again because we only wanted to resample data for the cross correlation,
             # Now we want to interpolate with data with the Labvanced 30Hz frame rate.
             lb_30hz = pd.read_csv('./data/lb_data/head_gaze/p' + str(counter) + '_XYTC.csv')
 
-            lb_30hz = interpolationET.formating_labvanced(lb_30hz)
+            lb_30hz = utilitiesCalc.formating_labvanced(lb_30hz)
             lb_30hz = lb_30hz.set_index('time_lb')
             # Sorting data to have large grid as a first
             lb_30hz = lb_30hz.sort_index(ascending=True)
@@ -168,7 +167,7 @@ class HeadExporter():
             df_interpolated.sort_index(ascending=True)
         #     df_interpolated.reset_index(inplace=True)
 
-            delay = cross_correlation.createLagSygCorrelation(df_interpolated)
+            delay = cross_correlation.findLagBetweenEyetrackers(df_interpolated)
             ms_delay = delay*2
             print("Lag after cross correlation and inteporlation is = " + str(ms_delay))
 
