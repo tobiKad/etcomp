@@ -1,28 +1,26 @@
 from data_preprocessing import rawDataExport, lastFixLB, headRawDataExport, spPreProcessing, fvPreProcessing
 from data_processing import largeGridPrec, largeGridAcc, smoothPursuit, freeView, headMovements
 
-# # Convert all Raw Data:
 print('Starting converting raw data interpolation and sync')
-# rawDataExport.GazeFixationsExport()
+rawDataExport.GazeFixationsExport()
 
-# # Head data exporting and interpolation
 print('Working on the Head Data')
-# headRawDataExport.HeadExporter()
+headRawDataExport.HeadExporter()
 
 print('Creating last fixation for both Eyetrackers and data formating')
-# lastFixLB.lastFixLB()
+lastFixLB.lastFixLB()
 
 print('Running the Larger Grid Fixations analysis')
 largeGridAcc.LargeGridAcc()
 largeGridPrec.LargeGridPrec()
 
-# print('Running the Smooth Pursuit analysis')
-# spPreProcessing.SpPre()
-# smoothPursuit.SmoothPursuit()
+print('Running the Smooth Pursuit analysis')
+spPreProcessing.SpPre()
+smoothPursuit.SmoothPursuit()
 
-# print('Running Free View Analysis')
-# fvPreProcessing.FvPre()
-# freeView.FreeView()
+print('Running Free View Analysis')
+fvPreProcessing.FvPre()
+freeView.FreeView()
 
-# print('Running  Head movments analysis')
-# headMovements.HeadMovements()
+print('Running  Head movments analysis')
+headMovements.HeadMovements()
